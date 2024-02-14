@@ -12,9 +12,14 @@ public class Meyer : MonoBehaviour
     List<GameObject> p2_List;
     int playerTurn = 0;
 
+    [SerializeField]
+    GameObject backgroundPanel;
+
+    public GameObject BluffModal;
+
     void Start()
     {
-        PlayerTurn(1);
+        PlayerTurn(2);
     }
 
     // Start Player Turn. (Argument: Player ID. 1 or 2)
@@ -188,7 +193,11 @@ public class Meyer : MonoBehaviour
 
     public void Bluff()
     {
+        GameObject modal = Instantiate(BluffModal);
 
+        modal.transform.SetParent(backgroundPanel.transform);
+
+        modal.transform.position = backgroundPanel.transform.position;
     }
 
     public void TellTruth()
