@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
+using Unity.VisualScripting;
 
 public class Meyer : MonoBehaviour
 {
@@ -10,34 +12,44 @@ public class Meyer : MonoBehaviour
     List<GameObject> p1_List;
     [SerializeField]
     List<GameObject> p2_List;
-    int playerTurn = 0;
 
     [SerializeField]
     GameObject backgroundPanel;
 
     public GameObject BluffModal;
+    int playerTurn;
+
+    int actualNumber;
 
     void Start()
     {
-        PlayerTurn(2);
+        PlayerTurn();
     }
 
     // Start Player Turn. (Argument: Player ID. 1 or 2)
-    public void PlayerTurn(int player)
+    public void PlayerTurn()
     {
+        switch (playerTurn)
+        {
+            case 1:
+                playerTurn = 2; break;
+            case 2:
+                playerTurn = 1 ; break;
+            default:
+                playerTurn = 1; break;
+        }
+
         // Declare variable
         List<Button> buttons = new List<Button>();
+        List<Button> buttons2 = new List<Button>();
 
-        // Check: Is argument valid?
-        if (player == 1)
+        // Check: Is function argument valid?
+        if (playerTurn == 1)
         {
-            // Set playerTurn variable. Used in Roll Dice function.
-            playerTurn = 1;
-
             // Gathers list of all buttons from the p1_List gameobject list.
             foreach (GameObject p in p1_List)
             {
-                if(p.tag == "RollDiceBtn")
+                if (p.tag == "RollDiceBtn")
                 {
                     Button button = p.GetComponent<Button>();
                     if (button != null)
@@ -46,17 +58,34 @@ public class Meyer : MonoBehaviour
                     }
                 }
             }
-
+            
             // Sets all the found button-elements to be interactable.
             foreach (Button button in buttons)
             {
                 button.interactable = true;
             }
-        } else if(player == 2)
-        {
-            // Set playerTurn variable. Used in Roll Dice function.
-            playerTurn = 2;
 
+            // Gathers list of all buttons from the p2_List gameobject list.
+            foreach (GameObject p in p2_List)
+            {
+                if (p.tag == "RollDiceBtn")
+                {
+                    Button button = p.GetComponent<Button>();
+                    if (button != null)
+                    {
+                        buttons2.Add(button);
+                    }
+                }
+            }
+
+            // Sets all the found button-elements to be interactable.
+            foreach (Button button in buttons2)
+            {
+                button.interactable = false;
+            }
+
+        } else if(playerTurn == 2)
+        {
             // Gathers list of all buttons from the p2_List gameobject list.
             foreach (GameObject p in p2_List)
             {
@@ -75,6 +104,26 @@ public class Meyer : MonoBehaviour
             {
                 button.interactable = true;
             }
+
+
+            // Gathers list of all buttons from the p1_List gameobject list.
+            foreach (GameObject p in p1_List)
+            {
+                if (p.tag == "RollDiceBtn")
+                {
+                    Button button = p.GetComponent<Button>();
+                    if (button != null)
+                    {
+                        buttons.Add(button);
+                    }
+                }
+            }
+
+            // Sets all the found button-elements to be interactable.
+            foreach (Button button in buttons)
+            {
+                button.interactable = false;
+            }
         } else
         {
             print("ERROR. PLAYER MUST BE 1 or 2!");
@@ -82,7 +131,7 @@ public class Meyer : MonoBehaviour
     }
 
     // Declare DiceRoll() variables
-    int previousNum = 0;
+    int previousNum;
     int id;
     int output;
 
@@ -191,17 +240,24 @@ public class Meyer : MonoBehaviour
         }
     }
 
+    // BluffBTN click event
     public void Bluff()
     {
-        GameObject modal = Instantiate(BluffModal);
+        if(id < previousNum)
+        {
+            GameObject modal = Instantiate(BluffModal);
 
-        modal.transform.SetParent(backgroundPanel.transform);
+            modal.transform.SetParent(backgroundPanel.transform);
 
-        modal.transform.position = backgroundPanel.transform.position;
+            modal.transform.position = backgroundPanel.transform.position;
+        }
     }
 
+    // TellTruthBTN click event
     public void TellTruth()
     {
+        actualNumber = output;
 
+        PlayerTurn();
     }
 }
