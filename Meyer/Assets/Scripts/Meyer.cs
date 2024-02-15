@@ -5,49 +5,77 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEditor;
 using Unity.VisualScripting;
+using UnityEngine.Windows;
+using JetBrains.Annotations;
 
 public class Meyer : MonoBehaviour
 {
     [SerializeField]
-    List<GameObject> p1_List;
-    [SerializeField]
-    List<GameObject> p2_List;
+    List<GameObject> obj_List;
 
     [SerializeField]
     GameObject backgroundPanel;
 
-    public GameObject BluffModal;
-    int playerTurn;
+    [SerializeField]
+    TMP_Text currentNumberTxt;
 
-    int actualNumber;
+    public GameObject BluffModal;
+    public int playerTurn;
+    public int actualNumber;
+
+    HealthScript hScript;
+
+    [SerializeField]
+    GameObject FadeInScreen;
+    GameObject FadeOutScreen;
+
+    public bool bluffing = false;
+
+    private void Awake()
+    {
+        hScript = GameObject.Find("HealthDisplay").GetComponent<HealthScript>();
+    }
 
     void Start()
     {
-        PlayerTurn();
+        GuessModal();
+    }
+
+    GameObject fadein;
+    public void GuessModal()
+    {
+        switch (playerTurn)
+        {
+            case 1:
+                playerTurn = 2;
+                fadein = Instantiate(FadeInScreen, backgroundPanel.transform);
+                fadein.transform.position = backgroundPanel.transform.position;
+                break;
+            case 2:
+                playerTurn = 1;
+                fadein = Instantiate(FadeInScreen, backgroundPanel.transform);
+                fadein.transform.position = backgroundPanel.transform.position;
+                break;
+            default:
+                playerTurn = 1;
+                PlayerTurn();
+                break;
+        }
     }
 
     // Start Player Turn. (Argument: Player ID. 1 or 2)
     public void PlayerTurn()
     {
-        switch (playerTurn)
-        {
-            case 1:
-                playerTurn = 2; break;
-            case 2:
-                playerTurn = 1 ; break;
-            default:
-                playerTurn = 1; break;
-        }
-
         // Declare variable
         List<Button> buttons = new List<Button>();
-        List<Button> buttons2 = new List<Button>();
 
         // Check: Is function argument valid?
         if (playerTurn == 1)
         {
-            // Gathers list of all buttons from the p1_List gameobject list.
-            foreach (GameObject p in p1_List)
+            hScript.healthAmount.text = hScript.player1.health.ToString() + "/6";
+
+            // Gathers list of all buttons from the obj_List gameobject list.
+            foreach (GameObject p in obj_List)
             {
                 if (p.tag == "RollDiceBtn")
                 {
@@ -57,37 +85,43 @@ public class Meyer : MonoBehaviour
                         buttons.Add(button);
                     }
                 }
+                else if (p.tag == "PlayerHeaderBG")
+                {
+                    p.gameObject.GetComponent<Image>().color = Color.blue;
+                    p.gameObject.GetComponentInChildren<TMP_Text>().text = "PLAYER 1";
+                }
+
+                if (p.tag == "BluffBtn" || p.tag == "TellTruthBtn")
+                {
+                    p.GetComponent<Button>().interactable = false;
+                }
+                else if (p.tag == "BluffBtn" || p.tag == "TellTruthBtn")
+                {
+                    p.GetComponent<Button>().interactable = false;
+                }
+                else if (p.tag == "RolledText")
+                {
+                    TMP_Text TMTxt = p.GetComponent<TMP_Text>();
+                    if (TMTxt != null)
+                    {
+                        TMTxt.text = "";
+                    }
+                }
             }
-            
+
             // Sets all the found button-elements to be interactable.
             foreach (Button button in buttons)
             {
                 button.interactable = true;
             }
 
-            // Gathers list of all buttons from the p2_List gameobject list.
-            foreach (GameObject p in p2_List)
-            {
-                if (p.tag == "RollDiceBtn")
-                {
-                    Button button = p.GetComponent<Button>();
-                    if (button != null)
-                    {
-                        buttons2.Add(button);
-                    }
-                }
-            }
-
-            // Sets all the found button-elements to be interactable.
-            foreach (Button button in buttons2)
-            {
-                button.interactable = false;
-            }
-
-        } else if(playerTurn == 2)
+        }
+        else if (playerTurn == 2)
         {
-            // Gathers list of all buttons from the p2_List gameobject list.
-            foreach (GameObject p in p2_List)
+            hScript.healthAmount.text = hScript.player2.health.ToString() + "/6";
+
+            // Gathers list of all buttons from the obj_List gameobject list.
+            foreach (GameObject p in obj_List)
             {
                 if (p.tag == "RollDiceBtn")
                 {
@@ -95,6 +129,23 @@ public class Meyer : MonoBehaviour
                     if (button != null)
                     {
                         buttons.Add(button);
+                    }
+                }
+                else if (p.tag == "PlayerHeaderBG")
+                {
+                    p.gameObject.GetComponent<Image>().color = Color.red;
+                    p.gameObject.GetComponentInChildren<TMP_Text>().text = "PLAYER 2";
+                }
+                else if (p.tag == "BluffBtn" || p.tag == "TellTruthBtn")
+                {
+                    p.GetComponent<Button>().interactable = false;
+                }
+                else if (p.tag == "RolledText")
+                {
+                    TMP_Text TMTxt = p.GetComponent<TMP_Text>();
+                    if (TMTxt != null)
+                    {
+                        TMTxt.text = "";
                     }
                 }
             }
@@ -104,36 +155,17 @@ public class Meyer : MonoBehaviour
             {
                 button.interactable = true;
             }
-
-
-            // Gathers list of all buttons from the p1_List gameobject list.
-            foreach (GameObject p in p1_List)
-            {
-                if (p.tag == "RollDiceBtn")
-                {
-                    Button button = p.GetComponent<Button>();
-                    if (button != null)
-                    {
-                        buttons.Add(button);
-                    }
-                }
-            }
-
-            // Sets all the found button-elements to be interactable.
-            foreach (Button button in buttons)
-            {
-                button.interactable = false;
-            }
-        } else
+        }
+        else
         {
             print("ERROR. PLAYER MUST BE 1 or 2!");
         }
     }
 
     // Declare DiceRoll() variables
-    int previousNum;
     int id;
     int output;
+    int[] nums = { 32, 41, 42, 43, 51, 52, 53, 54, 61, 62, 63, 64, 65, 11, 22, 33, 44, 55, 66, 31, 21 };
 
     // Function to roll dice.
     public void DiceRoll()
@@ -155,10 +187,8 @@ public class Meyer : MonoBehaviour
             print("Nummer: " + output.ToString());
         }
 
-        // Declare the wanted numbers
-        int[] nums = { 32, 41, 42, 43, 51, 52, 53, 54, 61, 62, 63, 64, 65, 11, 22, 33, 44, 55, 66, 31, 21 };
-
-        // Assign an ID corresponding to the number. This is to figure out, which number is valued the most, and which is valued the least.
+        // Assign an ID corresponding to the number.
+        // This is to figure out, which number is valued the most, and which is valued the least.
         for(int i = 0;  i < nums.Length; i++)
         {
             if (nums[i] == output)
@@ -173,7 +203,7 @@ public class Meyer : MonoBehaviour
         {
             // CHANGE TEXT OBJ AND DISABLE/ENABLE BUTTONS FOR PLAYER1
 
-            foreach (GameObject p in p1_List)
+            foreach (GameObject p in obj_List)
             {
                 if (p.tag == "RolledText")
                 {
@@ -205,7 +235,7 @@ public class Meyer : MonoBehaviour
         } else if(playerTurn == 2)
         {
             // CHANGE TEXT OBJ FOR PLAYER2
-            foreach (GameObject p in p2_List)
+            foreach (GameObject p in obj_List)
             {
                 if (p.tag == "RolledText")
                 {
@@ -243,21 +273,80 @@ public class Meyer : MonoBehaviour
     // BluffBTN click event
     public void Bluff()
     {
-        if(id < previousNum)
+        GameObject modal = Instantiate(BluffModal);
+        modal.transform.SetParent(backgroundPanel.transform);
+        modal.transform.position = backgroundPanel.transform.position;
+    }
+
+    int inputOrdered;
+    int inputId;
+    int actualNumId;
+    public void BluffConfirmed(int input1, int input2)
+    {
+        inputOrdered = int.Parse(input1.ToString() + input2.ToString());
+
+        for (int i = 0; i < nums.Length; i++)
         {
-            GameObject modal = Instantiate(BluffModal);
+            if (nums[i] == inputOrdered)
+            {
+                inputId = i;
+                print("ID: " + inputId.ToString());
+            } else if (nums[i] == actualNumber)
+            {
+                actualNumId = i;
+                print("ID: " + actualNumId.ToString());
+            }
+        }
 
-            modal.transform.SetParent(backgroundPanel.transform);
+        print(actualNumId + " - " + inputId);
 
-            modal.transform.position = backgroundPanel.transform.position;
+        bluffing = true;
+
+        if (inputId >= actualNumId)
+        {
+            actualNumber = inputOrdered;
+            currentNumberTxt.text = actualNumber.ToString();
+            GuessModal();
+        } else
+        {
+            hScript.DamagePlayer(1, playerTurn);
+            actualNumber = 0;
+            currentNumberTxt.text = actualNumber.ToString();
+            GuessModal();
         }
     }
 
     // TellTruthBTN click event
+    int outputId;
     public void TellTruth()
     {
-        actualNumber = output;
+        for (int i = 0; i < nums.Length; i++)
+        {
+            if (nums[i] == output)
+            {
+                outputId = i;
+                print("ID1: " + outputId.ToString());
+            }
+            else if (nums[i] == actualNumber)
+            {
+                actualNumId = i;
+                print("ID2: " + actualNumId.ToString());
+            }
+        }
 
-        PlayerTurn();
+        if (outputId >= actualNumId)
+        {
+            actualNumber = output;
+            currentNumberTxt.text = actualNumber.ToString();
+
+            GuessModal();
+        } else
+        {
+            hScript.DamagePlayer(1, playerTurn);
+            actualNumber = 0;
+            currentNumberTxt.text = actualNumber.ToString();
+
+            GuessModal();
+        }
     }
 }
