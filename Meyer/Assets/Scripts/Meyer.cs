@@ -27,7 +27,8 @@ public class Meyer : MonoBehaviour
 
     [SerializeField]
     GameObject FadeInScreen;
-    GameObject FadeOutScreen;
+    [SerializeField]
+    GameObject NewGameModal;
 
     public bool bluffing = false;
 
@@ -55,6 +56,30 @@ public class Meyer : MonoBehaviour
                 playerTurn = 1;
                 fadein = Instantiate(FadeInScreen, backgroundPanel.transform);
                 fadein.transform.position = backgroundPanel.transform.position;
+                break;
+            default:
+                playerTurn = 1;
+                PlayerTurn();
+                break;
+        }
+    }
+
+    GameObject gamemodal;
+    public void NewGame()
+    {
+        actualNumber = 0;
+
+        switch (playerTurn)
+        {
+            case 1:
+                playerTurn = 2;
+                gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
+                gamemodal.transform.position = backgroundPanel.transform.position;
+                break;
+            case 2:
+                playerTurn = 1;
+                gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
+                gamemodal.transform.position = backgroundPanel.transform.position;
                 break;
             default:
                 playerTurn = 1;
@@ -312,7 +337,7 @@ public class Meyer : MonoBehaviour
             hScript.DamagePlayer(1, playerTurn);
             actualNumber = 0;
             currentNumberTxt.text = actualNumber.ToString();
-            GuessModal();
+            NewGame();
         }
     }
 
@@ -346,7 +371,7 @@ public class Meyer : MonoBehaviour
             actualNumber = 0;
             currentNumberTxt.text = actualNumber.ToString();
 
-            GuessModal();
+            NewGame();
         }
     }
 }
