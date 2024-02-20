@@ -11,8 +11,6 @@ TagManager:
   - Canvas
   - Background
   - PlayerHeaderBG
-  - ModalInput1
-  - ModalInput2
   layers:
   - Default
   - TransparentFX

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewGameModalScript : MonoBehaviour
+public class NewGameModalScript2 : MonoBehaviour
 {
 
     Animator animator;
@@ -17,9 +17,9 @@ public class NewGameModalScript : MonoBehaviour
 
     public IEnumerator Remove()
     {
-        yield return new WaitForSeconds(8f);
-        animator.Play("GuessModalExit");
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4f);
+        animator.Play("NewGameModal2Exit");
+;       yield return new WaitForSeconds(2f);
         Destroy(this.gameObject);
     }
 }

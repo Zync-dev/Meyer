@@ -15,8 +15,12 @@ public class GuessModal : MonoBehaviour
     int thisplayer = 1;
     int otherplayer = 2;
 
+    Animator animator;
+
     private void Start()
     {
+        animator = GetComponent<Animator>();
+
         meyer = GameObject.Find("GameManager").GetComponent<Meyer>();
         hScript = GameObject.Find("HealthDisplay").GetComponent<HealthScript>();
 
@@ -34,25 +38,29 @@ public class GuessModal : MonoBehaviour
             case 2: otherplayer = 1; break;
             default: print("ERROR"); break;
         }
-        print(thisplayer);
-        print(otherplayer);
 
         if (meyer.bluffing == true)
         {
             hScript.DamagePlayer(1, otherplayer);
+            meyer.NewGameShort("CORRECT. THE OTHER PLAYER HAS LOST A POINT. THE NUMBER IS NOW 0 AGAIN.");
         } else
         {
             hScript.DamagePlayer(1, thisplayer);
-
-            meyer.actualNumber = 0;
+            meyer.NewGameShort("WRONG. YOU HAVE LOST A POINT. THE NUMBER IS NOW 0 AGAIN");
         }
-        meyer.PlayerTurn();
-        Destroy(this.gameObject);
+        StartCoroutine(DeleteOBJ());
     }
 
     public void TellingTruthBTN()
     {
         meyer.PlayerTurn();
+        StartCoroutine(DeleteOBJ());
+    }
+
+    public IEnumerator DeleteOBJ()
+    {
+        animator.Play("GuessModalExit");
+        yield return new WaitForSeconds(2f);
         Destroy(this.gameObject);
     }
 }

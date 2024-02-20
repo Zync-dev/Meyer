@@ -1462,11 +1462,12 @@ MonoBehaviour:
   - {fileID: 2080234731}
   backgroundPanel: {fileID: 2122676589}
   currentNumberTxt: {fileID: 655984492}
-  BluffModal: {fileID: 4001840041947077033, guid: ad6ae9dfb9364d34cab92e238569234a, type: 3}
+  BluffModal: {fileID: 6890539290427890744, guid: ad6ae9dfb9364d34cab92e238569234a, type: 3}
   playerTurn: 0
   actualNumber: 0
   FadeInScreen: {fileID: 4579047481493787609, guid: 3d4422934c079df48be613a3c817e8a0, type: 3}
   NewGameModal: {fileID: 4579047481493787609, guid: 8fdb39ee36d9617409fad0e41e802487, type: 3}
+  NewGameModal2: {fileID: 4579047481493787609, guid: b48f90983a7911e4188fec8a10412bf1, type: 3}
   bluffing: 0
 --- !u!4 &1172483787
 Transform:

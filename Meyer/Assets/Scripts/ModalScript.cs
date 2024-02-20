@@ -9,6 +9,48 @@ public class ModalScript : MonoBehaviour
 
     Meyer meyer;
 
+    [SerializeField]
+    TMP_Text NumView;
+
+    int[] nums = { 32, 41, 42, 43, 51, 52, 53, 54, 61, 62, 63, 64, 65, 11, 22, 33, 44, 55, 66, 31, 21 };
+
+    int currentIndex = 0;
+
+    Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+
+        NumView.text = nums[currentIndex].ToString();
+
+        print(nums.Length);
+    }
+
+    public void UpBtn()
+    {
+        if(currentIndex < nums.Length-1)
+        {
+            currentIndex++;
+        }
+        UpdateNumView();
+    }
+
+    public void DownBtn()
+    {
+        if (currentIndex > 0)
+        {
+            currentIndex--;
+        }
+        UpdateNumView();
+    }
+
+    void UpdateNumView()
+    {
+        print("CURRENT INDEX: " + currentIndex.ToString());
+        NumView.text = nums[currentIndex].ToString();
+    }
+
     private void Awake()
     {
         meyer = GameObject.Find("GameManager").GetComponent<Meyer>();
@@ -16,25 +58,20 @@ public class ModalScript : MonoBehaviour
 
     public void ConfirmBTN()
     {
-        GameObject input1 = GameObject.FindGameObjectWithTag("ModalInput1");
-        GameObject input2 = GameObject.FindGameObjectWithTag("ModalInput2");
+        meyer.BluffConfirmed(nums[currentIndex]);
 
-        if(int.Parse(input1.GetComponent<TMP_InputField>().text) >= 7 || int.Parse(input1.GetComponent<TMP_InputField>().text) < 1)
-        {
-            print("WRONG NUMBER IN INPUT 1");
-        } else if(int.Parse(input2.GetComponent<TMP_InputField>().text) >= 7 || int.Parse(input2.GetComponent<TMP_InputField>().text) < 1)
-        {
-            print("WRONG NUMBER IN INPUT 2");
-        } else
-        {
-            meyer.BluffConfirmed(int.Parse(input1.GetComponent<TMP_InputField>().text), int.Parse(input2.GetComponent<TMP_InputField>().text));
-        }
-
-        Destroy(this.gameObject);
+        StartCoroutine(DeleteOBJ());
     }
 
     public void CancelBTN()
     {
+        StartCoroutine(DeleteOBJ());
+    }
+
+    public IEnumerator DeleteOBJ()
+    {
+        animator.Play("InputModalExit");
+        yield return new WaitForSeconds(1f);
         Destroy(this.gameObject);
     }
 }

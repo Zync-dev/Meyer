@@ -29,6 +29,8 @@ public class Meyer : MonoBehaviour
     GameObject FadeInScreen;
     [SerializeField]
     GameObject NewGameModal;
+    [SerializeField]
+    GameObject NewGameModal2;
 
     public bool bluffing = false;
 
@@ -69,23 +71,28 @@ public class Meyer : MonoBehaviour
     {
         actualNumber = 0;
 
-        switch (playerTurn)
-        {
-            case 1:
-                playerTurn = 2;
-                gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
-                gamemodal.transform.position = backgroundPanel.transform.position;
-                break;
-            case 2:
-                playerTurn = 1;
-                gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
-                gamemodal.transform.position = backgroundPanel.transform.position;
-                break;
-            default:
-                playerTurn = 1;
-                PlayerTurn();
-                break;
-        }
+        gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
+        gamemodal.transform.position = backgroundPanel.transform.position;
+
+        PlayerTurn();
+    }
+
+    public void NewGameShort(string text)
+    {
+        actualNumber = 0;
+
+        StartCoroutine(NewGameShortDelay(text));
+
+        PlayerTurn();
+    }
+
+    public IEnumerator NewGameShortDelay(string text)
+    {
+        yield return new WaitForSeconds(1.1f);
+
+        gamemodal = Instantiate(NewGameModal2, backgroundPanel.transform);
+        gamemodal.transform.position = backgroundPanel.transform.position;
+        gamemodal.GetComponentInChildren<TMP_Text>().text = text;
     }
 
     // Start Player Turn. (Argument: Player ID. 1 or 2)
@@ -298,21 +305,18 @@ public class Meyer : MonoBehaviour
     // BluffBTN click event
     public void Bluff()
     {
-        GameObject modal = Instantiate(BluffModal);
-        modal.transform.SetParent(backgroundPanel.transform);
-        modal.transform.position = backgroundPanel.transform.position;
+        gamemodal = Instantiate(BluffModal, backgroundPanel.transform);
+        gamemodal.transform.position = backgroundPanel.transform.position;
     }
 
     int inputOrdered;
     int inputId;
     int actualNumId;
-    public void BluffConfirmed(int input1, int input2)
+    public void BluffConfirmed(int input)
     {
-        inputOrdered = int.Parse(input1.ToString() + input2.ToString());
-
         for (int i = 0; i < nums.Length; i++)
         {
-            if (nums[i] == inputOrdered)
+            if (nums[i] == input)
             {
                 inputId = i;
                 print("ID: " + inputId.ToString());
@@ -329,7 +333,7 @@ public class Meyer : MonoBehaviour
 
         if (inputId >= actualNumId)
         {
-            actualNumber = inputOrdered;
+            actualNumber = input;
             currentNumberTxt.text = actualNumber.ToString();
             GuessModal();
         } else
@@ -337,7 +341,7 @@ public class Meyer : MonoBehaviour
             hScript.DamagePlayer(1, playerTurn);
             actualNumber = 0;
             currentNumberTxt.text = actualNumber.ToString();
-            NewGame();
+            NewGameShort("THE OTHER PLAYER HAS LOST A POINT. THE NUMBER IS NOW 0 AGAIN. #1");
         }
     }
 
