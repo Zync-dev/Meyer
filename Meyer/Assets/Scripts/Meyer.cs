@@ -34,6 +34,8 @@ public class Meyer : MonoBehaviour
 
     public bool bluffing = false;
 
+    public GameObject DiceRollObj;
+
     private void Awake()
     {
         hScript = GameObject.Find("HealthDisplay").GetComponent<HealthScript>();
@@ -202,34 +204,15 @@ public class Meyer : MonoBehaviour
     // Function to roll dice.
     public void DiceRoll()
     {
-        // Gets 2 random numbers between 1 and 6.
-        int num1 = Random.Range(1, 7);
-        int num2 = Random.Range(1, 7);
+        GameObject DiceRollInstance = Instantiate(DiceRollObj, backgroundPanel.transform);
+        DiceRollInstance.transform.position = backgroundPanel.transform.position;
 
-        // Finds highest of the two numbers, and puts them together to form the highest possible.
-        if (num1 >= num2)
-        {
-            output = int.Parse(num1.ToString() + num2.ToString());
+        DiceRoll DiceRollScript = DiceRollInstance.GetComponent<DiceRoll>();
 
-            print("Nummer: " + output.ToString());
-        } else
-        {
-            output = int.Parse(num2.ToString() + num1.ToString());
+        int[] returnValues = DiceRollScript.RollDice();
 
-            print("Nummer: " + output.ToString());
-        }
-
-        // Assign an ID corresponding to the number.
-        // This is to figure out, which number is valued the most, and which is valued the least.
-        for(int i = 0;  i < nums.Length; i++)
-        {
-            if (nums[i] == output)
-            {
-                id = i;
-                print("ID: " + id.ToString());
-                break;
-            }
-        }
+        id = returnValues[0];
+        output = returnValues[1];
 
         if (playerTurn == 1)
         {

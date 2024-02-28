@@ -1469,6 +1469,7 @@ MonoBehaviour:
   NewGameModal: {fileID: 4579047481493787609, guid: 8fdb39ee36d9617409fad0e41e802487, type: 3}
   NewGameModal2: {fileID: 4579047481493787609, guid: b48f90983a7911e4188fec8a10412bf1, type: 3}
   bluffing: 0
+  DiceRollObj: {fileID: 2711156650131650523, guid: 85ae7827db864994b8eca6ea53eb402a, type: 3}
 --- !u!4 &1172483787
 Transform:
   m_ObjectHideFlags: 0
