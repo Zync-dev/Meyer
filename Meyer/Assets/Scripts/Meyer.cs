@@ -133,14 +133,6 @@ public class Meyer : MonoBehaviour
                 {
                     p.GetComponent<Button>().interactable = false;
                 }
-                else if (p.tag == "RolledText")
-                {
-                    TMP_Text TMTxt = p.GetComponent<TMP_Text>();
-                    if (TMTxt != null)
-                    {
-                        TMTxt.text = "";
-                    }
-                }
             }
 
             // Sets all the found button-elements to be interactable.
@@ -174,14 +166,6 @@ public class Meyer : MonoBehaviour
                 {
                     p.GetComponent<Button>().interactable = false;
                 }
-                else if (p.tag == "RolledText")
-                {
-                    TMP_Text TMTxt = p.GetComponent<TMP_Text>();
-                    if (TMTxt != null)
-                    {
-                        TMTxt.text = "";
-                    }
-                }
             }
 
             // Sets all the found button-elements to be interactable.
@@ -211,8 +195,8 @@ public class Meyer : MonoBehaviour
 
         int[] returnValues = DiceRollScript.RollDice();
 
-        id = returnValues[0];
-        output = returnValues[1];
+        id = returnValues[1];
+        output = returnValues[0];
 
         if (playerTurn == 1)
         {
@@ -220,14 +204,6 @@ public class Meyer : MonoBehaviour
 
             foreach (GameObject p in obj_List)
             {
-                if (p.tag == "RolledText")
-                {
-                    TMP_Text TMTxt = p.GetComponent<TMP_Text>();
-                    if (TMTxt != null)
-                    {
-                        TMTxt.text = "ROLLED: " + output.ToString();
-                    }
-                }
 
                 if (p.tag == "BluffBtn" || p.tag == "TellTruthBtn")
                 {
@@ -252,14 +228,6 @@ public class Meyer : MonoBehaviour
             // CHANGE TEXT OBJ FOR PLAYER2
             foreach (GameObject p in obj_List)
             {
-                if (p.tag == "RolledText")
-                {
-                    TMP_Text TMTxt = p.GetComponent<TMP_Text>();
-                    if (TMTxt != null)
-                    {
-                        TMTxt.text = "ROLLED: " + output.ToString();
-                    }
-                }
 
                 if (p.tag == "BluffBtn" || p.tag == "TellTruthBtn")
                 {

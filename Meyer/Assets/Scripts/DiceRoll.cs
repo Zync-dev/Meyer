@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DiceRoll : MonoBehaviour
 {
 
     public Image Dice1;
     public Image Dice2;
+    public Button CloseBtn;
+    public GameObject RolledTextHolder;
 
     public Sprite[] Sprites;
 
@@ -25,6 +28,11 @@ public class DiceRoll : MonoBehaviour
 
         Dice1.sprite = Sprites[output / 10 - 1];
         Dice2.sprite = Sprites[output % 10 - 1];
+
+        CloseBtn.gameObject.SetActive(true);
+        RolledTextHolder.gameObject.SetActive(true);
+
+        RolledTextHolder.GetComponentInChildren<TMP_Text>().text = "YOU ROLLED: " + output.ToString();
 
         StopCoroutine(ImageUpdater());
     }
@@ -79,5 +87,10 @@ public class DiceRoll : MonoBehaviour
         int[] returnValues = { output, id };
 
         return returnValues;
+    }
+
+    public void CloseBtnEvent()
+    {
+        Destroy(this.gameObject);
     }
 }
