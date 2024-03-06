@@ -11,6 +11,7 @@ TagManager:
   - Canvas
   - Background
   - PlayerHeaderBG
+  - Header
   layers:
   - Default
   - TransparentFX

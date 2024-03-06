@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.74793315, b: 1, a: 0.64705884}
+  m_Color: {r: 0, g: 0, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -568,6 +568,7 @@ MonoBehaviour:
   diceRollObj: {fileID: 2711156650131650523, guid: 85ae7827db864994b8eca6ea53eb402a, type: 3}
   bluffModal: {fileID: 6890539290427890744, guid: fa1f015d9714e8a40b6a5b179ecafbbd, type: 3}
   aiTurnModal: {fileID: 4310934443335523394, guid: 695767ccda0c8dc44ad203820f510326, type: 3}
+  currentNumText: {fileID: 749207856}
 --- !u!1 &420593285
 GameObject:
   m_ObjectHideFlags: 0

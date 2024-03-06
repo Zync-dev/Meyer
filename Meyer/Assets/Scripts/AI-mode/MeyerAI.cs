@@ -8,10 +8,10 @@ using UnityEngine.Windows;
 
 public class MeyerAI : MonoBehaviour
 {
-
+    int aiType = 1;
     int id;
     int output;
-    int actualNumber;
+    int currentNumber;
     int inputId;
     int actualNumId;
     bool bluffing = false;
@@ -19,14 +19,16 @@ public class MeyerAI : MonoBehaviour
 
     [SerializeField]
     List<GameObject> obj_List;
-    [SerializeField]
-    GameObject backgroundPanel;
+
+    public GameObject backgroundPanel;
     [SerializeField]
     GameObject diceRollObj;
     [SerializeField]
     GameObject bluffModal;
+
+    public GameObject aiTurnModal;
     [SerializeField]
-    GameObject aiTurnModal;
+    TMP_Text currentNumText;
 
     private void Start()
     {
@@ -73,11 +75,26 @@ public class MeyerAI : MonoBehaviour
     }
 
     GameObject aiTurnInstance;
+    GameObject aiTurnInstance2;
 
     public void AITurn()
     {
         aiTurnInstance = Instantiate(aiTurnModal, backgroundPanel.transform);
         aiTurnInstance.transform.position = backgroundPanel.transform.position;
+
+        int randomNum = Random.Range(0, 99);
+
+        if(aiType == 1)
+        {
+            if (randomNum > 50)
+            {
+                AIThinkBluffing();
+            }
+            else if (randomNum <= 50)
+            {
+                AIThinkTellingTruth();
+            }
+        }
 
 
         // Guess if bluffing or telling truth
@@ -89,6 +106,36 @@ public class MeyerAI : MonoBehaviour
 
     }
 
+    public void AIThinkTellingTruth()
+    {
+        GameObject Header = GameObject.FindGameObjectWithTag("Header");
+        Header.GetComponent<TMP_Text>().text = "THE AI BELIEVES THAT YOU'RE TELLING THE TRUTH.";
+        PlayerTurn();
+    }
+
+    public void AIThinkBluffing()
+    {
+        GameObject Header = GameObject.FindGameObjectWithTag("Header");
+        if (bluffing == true)
+        {
+            Header.GetComponent<TMP_Text>().text = "THE AI HAS GUESSED THAT YOU WERE BLUFFING. YOU LOST 1 HEALTH POINT.";
+            currentNumber = 0;
+            PlayerTurn();
+        } else if(bluffing == false)
+        {
+            Header.GetComponent<TMP_Text>().text = "THE AI HAS GUESSED THAT YOU WERE BLUFFING. THE AI LOST 1 HEALTH POINT.";
+            currentNumber = 0;
+            PlayerTurn();
+        }
+        // If bluffing
+        // Player lost health
+        // Reset currentNum
+
+        // If not bluffing
+        // AI lost health
+        // Reset currentNum
+    }
+
     public void AITurnAnim()
     {
         aiTurnInstance.GetComponent<Animator>().Play("ModalHideAnim");
@@ -96,9 +143,20 @@ public class MeyerAI : MonoBehaviour
 
     public void TellTruth()
     {
-        actualNumber = output;
+        currentNumber = output;
+        currentNumText.text = currentNumber.ToString(); 
 
         AITurn();
+    }
+
+    public void NewAIModalInstance()
+    {
+        aiTurnInstance2 = Instantiate(aiTurnModal, backgroundPanel.transform);
+        aiTurnInstance2.transform.position = backgroundPanel.transform.position;
+
+        AIModalScript aiModalScript = aiTurnInstance2.GetComponent<AIModalScript>();
+
+        aiModalScript.id = 1;
     }
 
     public void Bluff()
@@ -116,7 +174,7 @@ public class MeyerAI : MonoBehaviour
                 inputId = i;
                 print("ID: " + inputId.ToString());
             }
-            else if (nums[i] == actualNumber)
+            else if (nums[i] == currentNumber)
             {
                 actualNumId = i;
                 print("ID: " + actualNumId.ToString());
