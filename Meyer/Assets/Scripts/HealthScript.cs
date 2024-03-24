@@ -40,7 +40,8 @@ public class HealthScript : MonoBehaviour
                     player1.health = Random.Range(1, 7);
                     player1.hasRerolledHealth = true;
                     healthAmount.text = player1.health + "/6";
-                } else
+                } 
+                else
                 {
                     GameObject notify = Instantiate(notifyObj, backgroundPanel.transform);
                     NotificationScript notification = notify.GetComponent<NotificationScript>();
@@ -53,6 +54,12 @@ public class HealthScript : MonoBehaviour
                     player2.health = Random.Range(1, 7);
                     player2.hasRerolledHealth = true;
                     healthAmount.text = player2.health + "/6";
+                }
+                else
+                {
+                    GameObject notify = Instantiate(notifyObj, backgroundPanel.transform);
+                    NotificationScript notification = notify.GetComponent<NotificationScript>();
+                    notification.Notify("NOTIFICATION", "You have already used your re-roll.");
                 }
                 break;
         }
