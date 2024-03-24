@@ -12,8 +12,10 @@ public class HealthScript : MonoBehaviour
     public TMP_Text healthAmount;
     public Button rerollBtn;
     public GameObject notifyObj;
-    [SerializeField]
-    GameObject backgroundPanel;
+
+    public GameObject backgroundPanel;
+    public GameObject modalHolder;
+    public GameObject deathScreen;
 
     Meyer meyer;
 
@@ -79,6 +81,20 @@ public class HealthScript : MonoBehaviour
                 healthAmount.text = player2.health + "/6";
                 print("P2 Health: " + player2.health);
                 break;
+        }
+
+        if(player1.health <= 0 || player2.health <= 0)
+        {
+            GameObject deathScreenInstance = Instantiate(deathScreen, modalHolder.transform);
+            TMP_Text winnerTxt = deathScreenInstance.GetComponentInChildren<TMP_Text>();
+
+            if (player1.health <= 0)
+            {
+                winnerTxt.text = "PLAYER 2 HAS WON!";
+            } else if (player2.health <= 0)
+            {
+                winnerTxt.text = "PLAYER 1 HAS WON!";
+            }
         }
     }
 }

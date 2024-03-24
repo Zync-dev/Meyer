@@ -49,49 +49,56 @@ public class Meyer : MonoBehaviour
     GameObject fadein;
     public void GuessModal()
     {
-        switch (playerTurn)
+        if (hScript.player1.health > 0 && hScript.player2.health > 0)
         {
-            case 1:
-                playerTurn = 2;
-                fadein = Instantiate(FadeInScreen, backgroundPanel.transform);
-                fadein.transform.position = backgroundPanel.transform.position;
-                break;
-            case 2:
-                playerTurn = 1;
-                fadein = Instantiate(FadeInScreen, backgroundPanel.transform);
-                fadein.transform.position = backgroundPanel.transform.position;
-                break;
-            default:
-                playerTurn = 1;
-                PlayerTurn();
-                break;
+            switch (playerTurn)
+            {
+                case 1:
+                    playerTurn = 2;
+                    fadein = Instantiate(FadeInScreen, backgroundPanel.transform);
+                    fadein.transform.position = backgroundPanel.transform.position;
+                    break;
+                case 2:
+                    playerTurn = 1;
+                    fadein = Instantiate(FadeInScreen, backgroundPanel.transform);
+                    fadein.transform.position = backgroundPanel.transform.position;
+                    break;
+                default:
+                    playerTurn = 1;
+                    PlayerTurn();
+                    break;
+            }
         }
+            
     }
 
     GameObject gamemodal;
     public void NewGame()
     {
         actualNumber = 0;
-
-        switch (playerTurn)
+        if (hScript.player1.health > 0 && hScript.player2.health > 0)
         {
-            case 1:
-                playerTurn = 2;
-                gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
-                gamemodal.transform.position = backgroundPanel.transform.position;
-                PlayerTurn();
-                break;
-            case 2:
-                playerTurn = 1;
-                gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
-                gamemodal.transform.position = backgroundPanel.transform.position;
-                PlayerTurn();
-                break;
-            default:
-                playerTurn = 1;
-                PlayerTurn();
-                break;
+            switch (playerTurn)
+            {
+                case 1:
+                    playerTurn = 2;
+                    gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
+                    gamemodal.transform.position = backgroundPanel.transform.position;
+                    PlayerTurn();
+                    break;
+                case 2:
+                    playerTurn = 1;
+                    gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
+                    gamemodal.transform.position = backgroundPanel.transform.position;
+                    PlayerTurn();
+                    break;
+                default:
+                    playerTurn = 1;
+                    PlayerTurn();
+                    break;
+            }
         }
+            
     }
 
     public void NewGameShort(string text)

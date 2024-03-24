@@ -1147,6 +1147,8 @@ MonoBehaviour:
   rerollBtn: {fileID: 0}
   notifyObj: {fileID: 6317614159218275090, guid: a45e431b70e5fad4a8a28285741fa287, type: 3}
   backgroundPanel: {fileID: 340856448}
+  modalHolder: {fileID: 2122676589}
+  deathScreen: {fileID: 4579047481493787609, guid: 795b88e00fcce5b45918ad399ce9d178, type: 3}
 --- !u!1 &1007793382
 GameObject:
   m_ObjectHideFlags: 0
