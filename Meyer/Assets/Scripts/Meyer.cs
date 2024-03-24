@@ -73,10 +73,25 @@ public class Meyer : MonoBehaviour
     {
         actualNumber = 0;
 
-        gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
-        gamemodal.transform.position = backgroundPanel.transform.position;
-
-        PlayerTurn();
+        switch (playerTurn)
+        {
+            case 1:
+                playerTurn = 2;
+                gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
+                gamemodal.transform.position = backgroundPanel.transform.position;
+                PlayerTurn();
+                break;
+            case 2:
+                playerTurn = 1;
+                gamemodal = Instantiate(NewGameModal, backgroundPanel.transform);
+                gamemodal.transform.position = backgroundPanel.transform.position;
+                PlayerTurn();
+                break;
+            default:
+                playerTurn = 1;
+                PlayerTurn();
+                break;
+        }
     }
 
     public void NewGameShort(string text)
@@ -100,6 +115,9 @@ public class Meyer : MonoBehaviour
     // Start Player Turn. (Argument: Player ID. 1 or 2)
     public void PlayerTurn()
     {
+        bluffing = false;
+        currentNumberTxt.text = actualNumber.ToString();
+
         // Declare variable
         List<Button> buttons = new List<Button>();
 

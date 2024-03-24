@@ -43,10 +43,12 @@ public class GuessModal : MonoBehaviour
         {
             hScript.DamagePlayer(1, otherplayer);
             meyer.NewGameShort("CORRECT. THE OTHER PLAYER HAS LOST A POINT. THE NUMBER IS NOW 0 AGAIN.");
+            meyer.actualNumber = 0;
         } else
         {
             hScript.DamagePlayer(1, thisplayer);
             meyer.NewGameShort("WRONG. YOU HAVE LOST A POINT. THE NUMBER IS NOW 0 AGAIN");
+            meyer.actualNumber = 0;
         }
         StartCoroutine(DeleteOBJ());
     }
